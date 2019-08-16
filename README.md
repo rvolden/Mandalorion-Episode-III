@@ -25,3 +25,16 @@ Required options:
 -f  R2C2 read file (fasta)
 -b  R2C2 subread file (fastq)
 ```
+
+Tweakable parameters:
+```
+-m  score matrix file (defaults to NUC.4.4.mat)
+-u  upstream buffer (default 10)
+-d  downstream buffer (default 50)
+-s  subsample consensus (default 500)
+-r  minimum ratio (default 0.05)
+-i  minimum internal ratio (default 0.125)
+-R  minimum number of reads for an isoform (default 5)
+-O  overhangs (default 0,40,0,40)
+-t  number of threads to use for minimap2 (default 4)
+```

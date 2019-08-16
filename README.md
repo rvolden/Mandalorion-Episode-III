@@ -17,11 +17,11 @@ python3 defineAndQuantifyWrapper.py [OPTIONS]
 
 Required options:
 ```
-	-c  config file containing paths to required dependencies (above)
-	-p  output path
-	-g  annotation file (gtf)
-	-G  genome file (fasta)
-	-a  adapter file (fasta)
-	-f  R2C2 read file (fasta)
-	-b  R2C2 subread file (fastq)
+-c  config file containing paths to required dependencies (above)
+-p  output path
+-g  annotation file (gtf)
+-G  genome file (fasta)
+-a  adapter file (fasta)
+-f  R2C2 read file (fasta)
+-b  R2C2 subread file (fastq)
 ```

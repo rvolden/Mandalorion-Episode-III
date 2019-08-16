@@ -42,5 +42,4 @@ Tweakable parameters:
 -t  number of threads to use for minimap2 (default 4)
 ```
 
-These values define how lenient TSS and polyA sites are defined. We use an -u of 5 and -d of 30 meaning that read end aligning within 5nt upstream and 30nt downstream of a TSS or polyA site are combined.
 

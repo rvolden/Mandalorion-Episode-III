@@ -10,7 +10,7 @@ Takes R2C2/C3POa data and defines high confidence isoforms.
 - [emtrey](https://github.com/rvolden/emtrey) ([go](https://golang.org/dl/))
 - [blat source](https://users.soe.ucsc.edu/~kent/src/blatSrc35.zip) or [blat executable](http://hgdownload.soe.ucsc.edu/admin/exe/)
 
-These will need to be put into your config file [like this.](example_config)
+The paths to these will need to be put into your config file [like this.](example_config) If you have the program installed or in your path already, replace the path with the name of the program.
 
 ## Usage ##
 ```bash

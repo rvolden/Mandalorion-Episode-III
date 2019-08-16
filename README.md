@@ -26,6 +26,7 @@ Required options:
 -b  R2C2 subread file (fastq)
 ```
 
+
 Tweakable parameters:
 ```
 -m  score matrix file (defaults to NUC.4.4.mat)

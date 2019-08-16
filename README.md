@@ -1,4 +1,4 @@
-# Mandalorion-Episode-III #
+# Mandalorion Episode III #
 *Revenge of the Isoforms*
 
 Takes R2C2/C3POa data and defines high confidence isoforms.

@@ -1,0 +1,8 @@
+# This is where you will need to put paths to dependencies
+# Comments start with a hash
+# Extra programs will be ignored when read in
+
+racon	~/racon/bin/racon
+minimap2	~/minimap2/minimap2
+blat	~/blat/blat
+emtrey	~/emtrey/emtrey

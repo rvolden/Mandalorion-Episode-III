@@ -7,22 +7,42 @@ import os
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--config_file', type=str)
-parser.add_argument('-p', '--path', type=str)
-parser.add_argument('-m', '--score_matrix', type=str, default='./NUC.4.4.mat')
-parser.add_argument('-u', '--upstream_buffer', type=str, default='10')
-parser.add_argument('-d', '--downstream_buffer', type=str, default='50')
-parser.add_argument('-s', '--subsample_consensus', type=str, default='500')
-parser.add_argument('-g', '--genome_annotation', type=str)
-parser.add_argument('-G', '--genome_sequence', type=str)
-parser.add_argument('-r', '--minimum_ratio', type=str, default='0.05')
+parser.add_argument('-c', '--config_file', type=str,
+                    help='Tab delimited file that specifies where minimap, blat, \
+                          emtrey, and racon executables are')
+parser.add_argument('-p', '--path', type=str, help='Directory to put output files into')
+parser.add_argument('-m', '--score_matrix', type=str, default='./NUC.4.4.mat',
+                    help='Substitution matrix (default ./NUC.4.4.mat)')
+parser.add_argument('-u', '--upstream_buffer', type=str, default='10',
+                    help='Defines leniency window for TSS determination (default 10)')
+parser.add_argument('-d', '--downstream_buffer', type=str, default='50',
+                    help='Defines leniency window for polyA determination (default 50)')
+parser.add_argument('-s', '--subsample_consensus', type=str, default='500',
+                    help='Defines how many random subreads are used to make isoforms (default 500)')
+parser.add_argument('-g', '--genome_annotation', type=str,
+                    help='Genome annotation file (gtf)')
+parser.add_argument('-G', '--genome_sequence', type=str,
+                    help='Genome file (fasta)')
+parser.add_argument('-r', '--minimum_ratio', type=str, default='0.05',
+                    help='Proportion of reads that align to a locus required for an \
+                          isoform (default 0.05)')
 parser.add_argument('-i', '--minimum_internal_ratio', type=str, default='0.125')
-parser.add_argument('-R', '--minimum_reads', type=str, default='5')
-parser.add_argument('-a', '--adapter_file', type=str)
-parser.add_argument('-f', '--R2C2_Consensus_reads', type=str)
-parser.add_argument('-b', '--R2C2_subreads', type=str)
-parser.add_argument('-O', '--overhangs', type=str, default='0,40,0,40')
-parser.add_argument('-t', '--minimap2_threads', type=str, default='4')
+parser.add_argument('-R', '--minimum_reads', type=str, default='5',
+                    help='Minimum number of reads to make an isoform (default 5)')
+parser.add_argument('-a', '--adapter_file', type=str,
+                    help='Fasta file with 5prime and 3prime adapters')
+parser.add_argument('-f', '--R2C2_Consensus_reads', type=str,
+                    help='Fasta file with R2C2 consensus reads')
+parser.add_argument('-b', '--R2C2_subreads', type=str,
+                    help='Fastq file with R2C2 subreads')
+parser.add_argument('-O', '--overhangs', type=str, default='0,40,0,40',
+                    help='Defines bounds for unaligned bases on ends. \
+                          Format: min5prime,max5prime,min3prime,max3prime (default 0,40,0,40))')
+parser.add_argument('-t', '--minimap2_threads', type=str, default='4',
+                    help='Number of threads to use when running minimap (default 4)')
+parser.add_argument('-e', '--ends', type=str, default='ATGGG,AAAAA',
+                    help='Ends of your sequences. Defaults to Smartseq ends.\
+                          Format: 5prime,3prime')
 
 args = parser.parse_args()
 
@@ -42,6 +62,7 @@ fasta_file = args.R2C2_Consensus_reads
 subreads = args.R2C2_subreads
 overhangs = args.overhangs
 minimap2_threads = args.minimap2_threads
+ends = args.ends
 
 def configReader(configIn):
     '''Parses the config file.'''
@@ -51,13 +72,11 @@ def configReader(configIn):
             continue
         line = line.rstrip().split('\t')
         progs[line[0]] = line[1]
-    # should have minimap, poa, racon, gonk, consensus
-    possible = set(['poa', 'minimap2', 'gonk', 'consensus', 'racon', 'blat', 'emtrey'])
+    # should have minimap, racon, consensus, blat, and emtrey
+    possible = set(['minimap2', 'consensus', 'racon', 'blat', 'emtrey'])
     inConfig = set()
     for key in progs.keys():
         inConfig.add(key)
-        # if key not in possible:
-        #     raise Exception('Check config file')
     # check for missing programs
     # if missing, default to path
     for missing in possible-inConfig:
@@ -79,7 +98,7 @@ consensus = progs['consensus']
 emtrey = progs['emtrey']
 consensus = 'python3 ' + consensus
 
-print('aligning reads')
+print('Aligning reads')
 sam_file = fasta_file + '.sam'
 psl_file = fasta_file + '.psl'
 clean_psl_file = fasta_file + '.clean.psl'
@@ -91,4 +110,4 @@ os.system('python3 spliceSites.py %s %s %s %s %s %s' %(clean_psl_file, path, '0.
 print('Identifying Isoforms')
 os.system('python3 defineAndQuantifyIsoforms.py %s %s %s %s %s %s' %(clean_psl_file, path, downstream_buffer, upstream_buffer, subreads, fasta_file)) # This script sort raw reads into isoform bins. The two number variables determine the window around TSS and TES in which read ends can fall and still be matched to the site.
 os.system('python3 createConsensi.py -p %s -s %s -c %s -m %s' %(path, subsample_consensus, config_file, matrix))
-os.system('python3 filterIsoforms.py -p %s -i %s -r %s -R %s -n %s -a %s -G %s -c %s -O %s -t %s' %(path, path+'/Isoform_Consensi.fasta', minimum_ratio, minimum_reads, minimum_internal_ratio, adapter, genome_sequence, config_file, overhangs, minimap2_threads))
+os.system('python3 filterIsoforms.py -p %s -i %s -r %s -R %s -n %s -a %s -G %s -c %s -O %s -t %s -e %s' %(path, path+'/Isoform_Consensi.fasta', minimum_ratio, minimum_reads, minimum_internal_ratio, adapter, genome_sequence, config_file, overhangs, minimap2_threads, ends))

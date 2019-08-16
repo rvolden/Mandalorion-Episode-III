@@ -28,6 +28,9 @@ def argParser():
     parser.add_argument('-a', '--adapter', type=str)
     parser.add_argument('-O', '--overhangs', type=str)
     parser.add_argument('-t', '--minimap2_threads', type=str)
+    parser.add_argument('-e', '--ends', type=str, default='ATGGG,AAAAA',
+                        help='Ends of your sequences. Defaults to Smartseq ends.\
+                              Format: 5prime,3prime')
 
     return vars(parser.parse_args())
 
@@ -39,14 +42,11 @@ def configReader(configIn):
             continue
         line = line.rstrip().split('\t')
         progs[line[0]] = line[1]
-    # should have minimap, poa, racon, water, consensus
-    # check for extra programs that shouldn't be there
-    possible = set(['poa', 'minimap2', 'gonk', 'consensus', 'racon', 'blat','emtrey'])
+    # should have minimap, racon, consensus, blat, and emtrey
+    possible = set(['minimap2', 'consensus', 'racon', 'blat', 'emtrey'])
     inConfig = set()
     for key in progs.keys():
         inConfig.add(key)
-        # if key not in possible:
-        #     raise Exception('Check config file')
     # check for missing programs
     # if missing, default to path
     for missing in possible-inConfig:
@@ -72,6 +72,7 @@ configIn = args['config']
 adapter = args['adapter']
 overhangs = np.array(args['overhangs'].split(','), dtype=int)
 minimap2_threads = args['minimap2_threads']
+ends = args['ends']
 
 if args['config']:
     progs = configReader(args['config'])
@@ -328,7 +329,8 @@ def main(infile):
     temp_fasta = path + '/isoform_tmp.fasta'
     simplify(infile, temp_fasta, path + '/Isoform_long_names.txt')
 
-    os.system('%s -i %s -a %s -o %s -c %s'% ('python3 postprocessingIsoforms.py', temp_fasta, adapter, path, configIn))
+    os.system('%s -i %s -a %s -o %s -c %s -e %s'% ('python3 postprocessingIsoforms.py', temp_fasta,
+                                                   adapter, path, configIn, ends))
     print('reading fasta')
     processed_isoforms = path + 'Isoforms_full_length_consensus_reads.fasta'
     isoforms = read_fasta(processed_isoforms)

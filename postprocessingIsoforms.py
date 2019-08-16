@@ -19,12 +19,16 @@ def argParser():
                         help='If you want to use a config file to specify paths to\
                               programs, specify them here. Use for poa, racon, gonk,\
                               blat, and minimap2 if they are not in your path.')
+    parser.add_argument('-e', '--ends', type=str, default='ATGGG,AAAAA',
+                        help='Ends of your sequences. Defaults to Smartseq ends.\
+                              Format: 5prime,3prime')
     return vars(parser.parse_args())
 
 args = argParser()
 output_path = args['output_path'] + '/'
 input_file = args['input_fasta_file']
 adapter_file = args['adapter_file']
+ends = args['ends']
 
 def configReader(configIn):
     '''Parses the config file.'''
@@ -34,15 +38,11 @@ def configReader(configIn):
             continue
         line = line.rstrip().split('\t')
         progs[line[0]] = line[1]
-    # should have minimap, poa, racon, water, consensus
-    # check for extra programs that shouldn't be there
-    possible = set(['poa', 'minimap2', 'gonk', 'consensus', 'racon', 'blat','emtrey'])
+    # should have minimap, racon, consensus, blat, and emtrey
+    possible = set(['minimap2', 'consensus', 'racon', 'blat', 'emtrey'])
     inConfig = set()
     for key in progs.keys():
         inConfig.add(key)
-        # if key not in possible:
-        #     print(key)
-        #     raise Exception('Check config file')
     # check for missing programs
     # if missing, default to path
     for missing in possible-inConfig:
@@ -74,28 +74,6 @@ def read_fasta(inFile):
         else:
             readDict[lastHead] += line.upper()
     return readDict
-
-# def read_fasta(inFile):
-#     '''Reads in FASTA files, returns a dict of header:sequence'''
-#     readDict = {}
-#     tempSeqs, headers, sequences = [], [], []
-#     for line in open(inFile):
-#         line = line.rstrip()
-#         if not line:
-#             continue
-#         if line.startswith('>'):
-#             headers.append(line.split()[0][1:])
-#         # covers the case where the file ends while reading sequences
-#         if line.startswith('>'):
-#             sequences.append(''.join(tempSeqs).upper())
-#             tempSeqs = []
-#         else:
-#             tempSeqs.append(line)
-#     sequences.append(''.join(tempSeqs).upper())
-#     sequences = sequences[1:]
-#     for i in range(len(headers)):
-#         readDict[headers[i]] = sequences[i]
-#     return readDict
 
 def reverse_complement(sequence):
     '''Returns the reverse complement of a sequence'''
@@ -137,9 +115,10 @@ def parse_blat(reads,path):
 
 def screen_for_53(seq1, seq2):
     direction = '.'
-    if 'ATGGG' in seq1 and 'AAAAA' in seq2:
+    fivePrime, threePrime = ends.split(',')[0], ends.split(',')[1]
+    if fivePrime in seq1 and threePrime in seq2:
         direction = '+'
-    elif 'ATGGG' in reverse_complement(seq2) and 'AAAAA' in reverse_complement(seq1):
+    elif fivePrime in reverse_complement(seq2) and threePrime in reverse_complement(seq1):
         direction = '-'
     return direction
 

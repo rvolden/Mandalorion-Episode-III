@@ -36,14 +36,11 @@ def configReader(configIn):
             continue
         line = line.rstrip().split('\t')
         progs[line[0]] = line[1]
-    # should have minimap, poa, racon, gonk, consensus
-    # check for extra programs that shouldn't be there
-    possible = set(['poa', 'minimap2', 'gonk', 'consensus', 'racon', 'blat','emtrey'])
+    # should have minimap, racon, consensus, blat, and emtrey
+    possible = set(['minimap2', 'consensus', 'racon', 'blat', 'emtrey'])
     inConfig = set()
     for key in progs.keys():
         inConfig.add(key)
-        # if key not in possible:
-        #     raise Exception('Check config file')
     # check for missing programs
     # if missing, default to path
     for missing in possible-inConfig:
@@ -178,7 +175,7 @@ def determine_consensus(name, fasta, fastq):
 
                 os.system('%s -q 5 -t 1 \
                           %s %s %s >%s  2>./racon_messages.txt' \
-                          %(racon,out_Fq, overlap, input_cons, output_cons))
+                          %(racon, out_Fq, overlap, input_cons, output_cons))
 
                 final = output_cons
             except:
@@ -201,7 +198,7 @@ def main():
         combined_consensus_file = open(path + '/Isoform_Consensi.fasta', 'a')
 
         combined_consensus_file.write('>' + name + '_' + repeats + '\n'
-                                      +corrected_consensus + '\n')
+                                      + corrected_consensus + '\n')
         combined_consensus_file.close()
 
 main()

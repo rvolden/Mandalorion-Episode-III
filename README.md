@@ -42,4 +42,7 @@ Tweakable parameters:
 -t  number of threads to use for minimap2 (default 4)
 ```
 
-
+Running with default settings:
+```bash
+python3 defineAndQuantifyWrapper.py -c config_file -p . -g gencodeV29.gtf -G hg38.fasta -a adapters.fasta -f R2C2_consensi.fasta -b R2C2_subreads.fastq
+```

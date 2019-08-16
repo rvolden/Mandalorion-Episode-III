@@ -33,7 +33,6 @@ Required options:
 -b  R2C2 subread file (fastq)
 ```
 
-
 Tweakable parameters:
 ```
 -m  score matrix file (defaults to NUC.4.4.mat)
@@ -45,5 +44,6 @@ Tweakable parameters:
 -R  minimum number of reads for an isoform (default 5)
 -O  overhangs, defines bounds for unaligned bases on ends, format: min5',max5',min3',max3' (default 0,40,0,40)
 -t  number of threads to use for minimap2 (default 4)
+-e  ends, the ends of your sequences, format: 5prime,3prime (default 'ATGGG,AAAAA')
 ```
 

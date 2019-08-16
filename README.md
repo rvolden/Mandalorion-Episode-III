@@ -32,12 +32,15 @@ Required options:
 Tweakable parameters:
 ```
 -m  score matrix file (defaults to NUC.4.4.mat)
--u  upstream buffer (default 10)
--d  downstream buffer (default 50)
--s  subsample consensus (default 500)
--r  minimum ratio (default 0.05)
+-u  upstream buffer, defines leniency window for TSS definition (default 10)
+-d  downstream buffer, defines leniency window for polyA definition (default 50)
+-s  subsample consensus, defines how many random subreads are used to make isoforms (default 500)
+-r  minimum ratio, percentage of reads that align to a locus required for an isoform (default 0.05)
 -i  minimum internal ratio (default 0.125)
 -R  minimum number of reads for an isoform (default 5)
--O  overhangs (default 0,40,0,40)
+-O  overhangs, defines bounds for unaligned bases on ends, format: min5',max5',min3',max3' (default 0,40,0,40)
 -t  number of threads to use for minimap2 (default 4)
 ```
+
+These values define how lenient TSS and polyA sites are defined. We use an -u of 5 and -d of 30 meaning that read end aligning within 5nt upstream and 30nt downstream of a TSS or polyA site are combined.
+

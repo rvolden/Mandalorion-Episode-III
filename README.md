@@ -39,7 +39,7 @@ Tweakable parameters:
 -u  upstream buffer, defines leniency window for TSS definition (default 10)
 -d  downstream buffer, defines leniency window for polyA definition (default 50)
 -s  subsample consensus, defines how many random subreads are used to make isoforms (default 500)
--r  minimum ratio, percentage of reads that align to a locus required for an isoform (default 0.05)
+-r  minimum ratio, proportion of reads that align to a locus required for an isoform (default 0.05)
 -i  minimum internal ratio (default 0.125)
 -R  minimum number of reads for an isoform (default 5)
 -O  overhangs, defines bounds for unaligned bases on ends, format: min5',max5',min3',max3' (default 0,40,0,40)

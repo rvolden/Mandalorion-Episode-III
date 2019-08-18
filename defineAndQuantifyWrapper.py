@@ -91,9 +91,7 @@ def configReader(configIn):
 
 progs = configReader(config_file)
 minimap2 = progs['minimap2']
-poa = progs['poa']
 racon = progs['racon']
-gonk = progs['gonk']
 consensus = progs['consensus']
 emtrey = progs['emtrey']
 consensus = 'python3 ' + consensus

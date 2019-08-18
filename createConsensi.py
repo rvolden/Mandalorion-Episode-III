@@ -62,12 +62,12 @@ score_matrix = args['matrix']
 if args['config']:
     progs = configReader(args['config'])
     minimap2 = progs['minimap2']
-    poa = progs['poa']
     racon = progs['racon']
-    gonk = progs['gonk']
     consensus = progs['consensus']
+    emtrey = progs['emtrey']
+    blat = progs['blat']
 else:
-    minimap2, poa, racon, gonk = 'minimap2', 'poa', 'racon', 'gonk'
+    minimap2, racon, emtrey, blat = 'minimap2', 'racon', 'emtrey', 'blat'
     consensus = 'consensus.py'
 
 consensus = 'python3 ' + consensus

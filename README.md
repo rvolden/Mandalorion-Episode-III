@@ -47,3 +47,5 @@ Tweakable parameters:
 -e  ends, the ends of your sequences, format: 5prime,3prime (default 'ATGGG,AAAAA')
 ```
 
+## Utils ##
+These are the scripts used in the paper to do haplotype phasing and HLA analysis.

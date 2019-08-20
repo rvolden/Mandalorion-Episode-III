@@ -62,28 +62,6 @@ def read_fasta(inFile):
             readDict[lastHead] += line.upper()
     return readDict
 
-# def read_fasta(inFile):
-#     '''Reads in FASTA files, returns a dict of header:sequence'''
-#     readDict = {}
-#     tempSeqs, headers, sequences = [], [], []
-#     for line in open(inFile):
-#         line = line.rstrip()
-#         if not line:
-#             continue
-#         if line.startswith('>'):
-#             headers.append(line[1:].strip())
-#         # covers the case where the file ends while reading sequences
-#         if line.startswith('>'):
-#             sequences.append(''.join(tempSeqs).upper())
-#             tempSeqs = []
-#         else:
-#             tempSeqs.append(line)
-#     sequences.append(''.join(tempSeqs).upper())
-#     sequences = sequences[1:]
-#     for i in range(len(headers)):
-#         readDict[headers[i]] = sequences[i]
-#     return readDict
-
 def find_gene_match(fasta_file, gene_list, genome_sequence):
     sam_file = fasta_file + '.sam'
     psl_file = fasta_file + '.psl'

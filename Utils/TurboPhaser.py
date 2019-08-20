@@ -16,22 +16,23 @@ outfile_path = args.output_path
 def read_vcf(vcf_file):
     snps = {}
     for line in open(vcf_file):
-        if line[0] != '#':
-            a = line.strip().split('\t')
-            chromosome, position = a[0], a[1]
-            ref, alt = a[3], a[4]
+        if line[0] == '#':
+            continue
+        a = line.strip().split('\t')
+        chromosome, position = a[0], a[1]
+        ref, alt = a[3], a[4]
 
-            status = a[9].split(':')[0]
-            alt_split = alt.split(',')
-            if len(alt_split) > 1:
-                ref = alt = alt_split[0]
+        status = a[9].split(':')[0]
+        alt_split = alt.split(',')
+        if len(alt_split) > 1:
+            ref = alt = alt_split[0]
 
-            first, second = status.split('/')[0], status.split('/')[1]
-            if first != second:
-                if chromosome not in snps:
-                    snps[chromosome] = {}
-                if len(ref) == 1 and len(alt) == 1 and ref != alt:
-                    snps[chromosome][int(position)] = ((ref, first), (alt, second))
+        first, second = status.split('/')[0], status.split('/')[1]
+        if first != second:
+            if chromosome not in snps:
+                snps[chromosome] = {}
+            if len(ref) == 1 and len(alt) == 1 and ref != alt:
+                snps[chromosome][int(position)] = ((ref, first), (alt, second))
     return(snps)
 
 def connecting_snps(comb_dict):
@@ -133,7 +134,7 @@ def parse_reads(snps, read_file):
             if snp1 not in connections:
                 connections[snp1] = {}
             for snp2 in snpList:
-                if snp1!=snp2:
+                if snp1 != snp2:
                     if snp2 not in connections[snp1]:
                          connections[snp1][snp2] = 0
                     connections[snp1][snp2] += 1
@@ -235,7 +236,7 @@ def determine_haplo_group(
 
 def create_haplotypes(groups, connections, snps, snp_count, read_minimum):
     haplo_group = {}
-    bed = open(outfile_path+'/snp.bed', 'w')
+    bed = open(outfile_path + '/snp.bed', 'w')
 
     print('read_minimum', read_minimum)
     for group in groups:

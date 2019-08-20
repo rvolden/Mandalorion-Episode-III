@@ -50,7 +50,7 @@ def parse_contigs(psl_file, pslx_file, genome, reads):
         blockstarts = np.array(a[20].split(',')[:-1], dtype=int)
         readstarts = np.array(a[19].split(',')[:-1], dtype=int)
         qseqs, tseqs = '', ''
-        for index in range(0,len(blocksizes),1):
+        for index in range(0, len(blocksizes), 1):
             blocksize = blocksizes[index]
             blockstart = blockstarts[index]
             readstart = readstarts[index]
@@ -66,7 +66,7 @@ def parse_contigs(psl_file, pslx_file, genome, reads):
             tseqs += genome_block_sequence + ','
 
         a[1] = str(mismatches)
-        new_line = ('\t').join(a)
+        new_line = '\t'.join(a)
         new_line += '\t' + qseqs + '\t' + tseqs
         out.write(new_line + '\n')
 

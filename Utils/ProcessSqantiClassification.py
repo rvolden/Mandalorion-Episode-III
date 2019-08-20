@@ -176,19 +176,19 @@ def read_isoforms(
                         test = False
 
                         if blockstart - previous_blockend >= 50:
-                             exonstart = previous_blockstart
-                             exonend = previous_blockend
-                             previous_blockstart = blockstart
-                             previous_blockend = blockend
-                             test = True
+                            exonstart = previous_blockstart
+                            exonend = previous_blockend
+                            previous_blockstart = blockstart
+                            previous_blockend = blockend
+                            test = True
 
                         elif blockstart - previous_blockend < 50:
-                             previous_blockend = blockend
+                            previous_blockend = blockend
 
                         if test and 'exon' in targets:
-                             exon_dict = test_overlap(name, exonstart, exonend,
-                                                      exon_dict, direction,
-                                                      chromosome, new_exons)
+                            exon_dict = test_overlap(name, exonstart, exonend,
+                                                     exon_dict, direction,
+                                                     chromosome, new_exons)
 
                     exonstart = previous_blockstart
                     exonend = blockend

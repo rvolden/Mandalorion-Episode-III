@@ -252,43 +252,41 @@ def define_isoform_loci(isoform_file, target_chromosome):
         name = a[9]
         parts = name.split('_')
         splice = parts[1]
-        if splice != '':
-            if chromosome == target_chromosome:
-                start = int(a[15])
-                end = int(a[16])
-                direction = a[8]
-                name = a[9]
+        if splice and chromosome == target_chromosome:
+            start = int(a[15])
+            end = int(a[16])
+            direction = a[8]
+            name = a[9]
 
-                begin, span = int(a[15]), int(a[16])
-                blocksizes = a[18].split(',')[:-1]
-                blockstarts = a[20].split(',')[:-1]
-                readstarts = a[19].split(',')[:-1]
-                overlap = False
-                for base in range(begin, span, 1):
-                    if not loci_dict.get(base):
-                        pass
-                    else:
-                        locus = loci_dict[base]
-                        loci_content[locus].append((start, end, direction,
-                                                    blocksizes, blockstarts,
-                                                    readstarts, name))
-                        overlap = True
-                        for base in range(begin, span, 1):
-                            loci_dict[base] = locus
-                        break
-                if overlap == False:
-                    locus = chromosome + '_' + str(counter)
+            begin, span = int(a[15]), int(a[16])
+            blocksizes = a[18].split(',')[:-1]
+            blockstarts = a[20].split(',')[:-1]
+            readstarts = a[19].split(',')[:-1]
+            overlap = False
+            for base in range(begin, span, 1):
+                if not loci_dict.get(base):
+                    pass
+                else:
+                    locus = loci_dict[base]
+                    loci_content[locus].append((start, end, direction,
+                                                blocksizes, blockstarts,
+                                                readstarts, name))
+                    overlap = True
                     for base in range(begin, span, 1):
                         loci_dict[base] = locus
-                    loci_content[locus] = []
-                    loci_content[locus].append((start, end, direction, blocksizes,
-                                                blockstarts, readstarts, name))
-                    counter += 1
+                    break
+            if not overlap:
+                locus = chromosome + '_' + str(counter)
+                for base in range(begin, span, 1):
+                    loci_dict[base] = locus
+                loci_content[locus] = []
+                loci_content[locus].append((start, end, direction, blocksizes,
+                                            blockstarts, readstarts, name))
+                counter += 1
     return loci_content
 
 def count_exons(exon_file):
-    counter = 0
-    lengths = []
+    counter, lengths = 0, []
     for line in open(exon_file):
         counter += 1
         a = line.strip().split('\t')
@@ -320,19 +318,19 @@ def count_locus(locus_file):
     return counter, isoforms
 
 def get_isoform_classification(classification):
-    counter, dict1 = 0, {}
+    first, dict1 = True, {}
     type_set = set()
     for line in open(classification):
-        counter += 1
         a = line.strip().split('\t')
-        if counter > 1:
-            dict1[a[0]] = a[5]
-            type_set.add(a[5])
+        if first:
+            first = False
+            continue
+        dict1[a[0]] = a[5]
+        type_set.add(a[5])
 
     for type1 in type_set:
         os.system('touch %s' %(path + '/' + type1 + '.psl'))
         os.system('touch %s' %(path + '/' + type1 + '.fasta'))
-
     return dict1
 
 def read_fasta(inFile):
@@ -422,7 +420,7 @@ def print_summary_stats(sqanti_folder):
     counter = count_start_ends(sqanti_folder + 'R2C2_newly_identified_polyA.bed')
     print(str(counter) + ' new polyAs')
     counter, counter_spliced = count_new_loci(sqanti_folder + 'R2C2_newly_identified_gene_loci.psl')
-    counter_all, isoforms = count_locus(sqanti_folder+'R2C2_all_loci.txt')
+    counter_all, isoforms = count_locus(sqanti_folder + 'R2C2_all_loci.txt')
     print(str(counter_all) + ' gene_loci with a total of ' + str(sum(isoforms)) \
           + ' isoforms.\n Of these loci ' + str(counter) \
           + ' do not overlap with known loci containing ' \

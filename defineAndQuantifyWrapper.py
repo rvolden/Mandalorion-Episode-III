@@ -64,6 +64,9 @@ overhangs = args.overhangs
 minimap2_threads = args.minimap2_threads
 ends = args.ends
 
+if not os.path.isdir(path):
+    os.system('mkdir %s' %path)
+
 def configReader(configIn):
     '''Parses the config file.'''
     progs = {}

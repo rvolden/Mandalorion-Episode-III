@@ -191,8 +191,7 @@ def determine_consensus(name, fasta, fastq):
     return corrected_consensus, repeats
 
 def main():
-    combined_consensus_file = open(path + '/Isoform_Consensi.fasta', 'w')
-    combined_consensus_file.close()
+    os.system('touch {0}'.format(path + '/Isoform_Consensi.fasta'))
 
     for line in open(path + '/isoform_list'):
         fasta = line.split('\t')[0]

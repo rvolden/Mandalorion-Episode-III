@@ -70,12 +70,12 @@ def read_fasta(inFile):
             continue
         if line.startswith('>'):
             if readDict:
-                ''.join(readDict[lastHead])
+                readDict[lastHead] = ''.join(readDict[lastHead])
             readDict[line[1:]] = []
             lastHead = line[1:]
         else:
             readDict[lastHead].append(line.upper())
-    ''.join(readDict[lastHead])
+    readDict[lastHead] = ''.join(readDict[lastHead])
     return readDict
 
 def reverse_complement(sequence):

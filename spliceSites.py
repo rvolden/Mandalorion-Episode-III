@@ -99,21 +99,6 @@ def determine_coverage(coverage_area, chromosome, reverse,
     coverage = max(coverage)
     return coverage, coverage_area
 
-# def read_seq_file(seq_file):
-#     read_seq = {}
-#     length = 0
-#     for line2 in open(seq_file):
-#         length += 1
-#     seq_file_open = open(seq_file, 'r')
-#     counter = 0
-#     while counter < length:
-#         fasta_name = seq_file_open.readline().strip()
-#         fasta_seq = seq_file_open.readline().strip()
-#         fasta_name = fasta_name[1:]
-#         read_seq[fasta_name] = fasta_seq
-#         counter += 2
-#     return read_seq
-
 def myround(x, base=10):
     '''Rounds to the nearest base'''
     return int(base * round(float(x)/base))

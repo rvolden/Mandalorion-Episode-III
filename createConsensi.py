@@ -119,7 +119,8 @@ def read_fasta(inFile):
             lastHead = line[1:]
         else:
             readDict[lastHead].append(line.upper())
-    readDict[lastHead] = ''.join(readDict[lastHead])
+    if readDict:
+        readDict[lastHead] = ''.join(readDict[lastHead])
     return readDict
 
 def determine_consensus(name, fasta, fastq):

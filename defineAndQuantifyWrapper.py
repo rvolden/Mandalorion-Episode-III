@@ -14,9 +14,9 @@ parser.add_argument('-p', '--path', type=str, help='Directory to put output file
 parser.add_argument('-m', '--score_matrix', type=str, default='./NUC.4.4.mat',
                     help='Substitution matrix (default ./NUC.4.4.mat)')
 parser.add_argument('-u', '--upstream_buffer', type=str, default='10',
-                    help='Defines leniency window for TSS determination (default 10)')
+                    help='Defines leniency window for polyA and TSS determination (default 10)')
 parser.add_argument('-d', '--downstream_buffer', type=str, default='50',
-                    help='Defines leniency window for polyA determination (default 50)')
+                    help='Defines leniency window for polyA and TSS determination (default 50)')
 parser.add_argument('-s', '--subsample_consensus', type=str, default='500',
                     help='Defines how many random subreads are used to make isoforms (default 500)')
 parser.add_argument('-g', '--genome_annotation', type=str,

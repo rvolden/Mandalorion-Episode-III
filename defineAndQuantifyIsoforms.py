@@ -89,10 +89,14 @@ def sort_reads_into_splice_junctions(splice_dict,
                 left_splice = blockstart + blocksize
                 right_splice = int(blockstarts[x+1])
                 if right_splice - left_splice > 50:
-                    if not splice_dict[read_chromosome].get(left_splice) \
-                            or not splice_dict[read_chromosome].get(right_splice):
+                    if not splice_dict.get(read_chromosome):
                         failed = True
                         break
+                    else:
+                        if not splice_dict[read_chromosome].get(left_splice) \
+                                or not splice_dict[read_chromosome].get(right_splice):
+                            failed = True
+                            break
                     left_splice_site = splice_dict[read_chromosome][left_splice]
                     right_splice_site = splice_dict[read_chromosome][right_splice]
                     identity += str(left_splice_site) + '-' \

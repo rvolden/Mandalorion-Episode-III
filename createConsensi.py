@@ -191,6 +191,8 @@ def determine_consensus(name, fasta, fastq):
     return corrected_consensus, repeats
 
 def main():
+    if os.path.exists(path + '/Isoform_Consensi.fasta'):
+        os.system('rm ' + path + '/Isoform_Consensi.fasta')
     os.system('touch {0}'.format(path + '/Isoform_Consensi.fasta'))
 
     for line in open(path + '/isoform_list'):
